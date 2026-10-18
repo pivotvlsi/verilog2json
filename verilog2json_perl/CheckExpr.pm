@@ -147,7 +147,12 @@ sub create_postfix {
             $stack_length += 1;
             $prev_was_operand = 0;
         } else {
-            push @output, $i;
+            my $tok = $i;
+            if ($tok =~ /^\d*\'[sS]?[bodhBODH][a-fA-F0-9xXzZ_]+$/) {
+                my ($bin_val, $signed_val) = ModulePort::convert_to_binary($tok, undef, $line_no);
+                $tok = $bin_val if defined $bin_val;
+            }
+            push @output, $tok;
             $prev_was_operand = 1;
         }
     }

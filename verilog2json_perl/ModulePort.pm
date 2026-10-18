@@ -531,7 +531,7 @@ sub convert_to_binary {
         }
         
         # 1. Base Padding
-        my $working_size = defined $size ? $size : (defined $target_size ? $target_size : 32);
+        my $working_size = (defined $size && $size ne "") ? $size : (defined $target_size ? $target_size : 32);
         
         my $len = length($bin_str);
         if ($len < $working_size) {
