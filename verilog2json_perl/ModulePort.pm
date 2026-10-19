@@ -197,11 +197,14 @@ sub populate_port_varga {
     
     $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{"अनावृत_अवगाढता"} = [];
     if (defined $unpacked_dims && $unpacked_dims ne "") {
+        my $unpacked_idx = 0;
         while ($unpacked_dims =~ /^\s*\[/) {
             if ($unpacked_dims =~ /\[\s*(\d+)\s*:\s*(\d+)\s*\]/) {
                 my $lsb = $2;
                 my $msb = $1;
                 push @{ $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{"अनावृत_अवगाढता"} }, { "आद्यसूचकः" => $lsb, "अन्त्यसूचकः" => $msb };
+                $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{$unpacked_idx . "_अनावृत_अवगाढता"} = { "आद्यसूचकः" => $lsb, "अन्त्यसूचकः" => $msb };
+                $unpacked_idx++;
                 $unpacked_dims =~ s/\[\s*$msb\s*:\s*$lsb\s*\]//;
             } else {
                 Diagnostics::report_diagnostic("Error", "ERR_PORT_DECLARATION", "Error in unpacked declaration $port_name", $line_no);
