@@ -34,8 +34,8 @@ sub validate_assignment {
     
     # Count expected unpacked dimensions
     my $unpacked_dims = 0;
-    if (exists $var_data->{"अनावृत_अवगाढता"}) {
-        $unpacked_dims = scalar @{$var_data->{"अनावृत_अवगाढता"}};
+    while (exists $var_data->{$unpacked_dims . "_अनावृत_अवगाढता"}) {
+        $unpacked_dims++;
     }
     
     # Rule 1: Full Array Write check

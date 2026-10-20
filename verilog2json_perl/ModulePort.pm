@@ -195,14 +195,12 @@ sub populate_port_varga {
 
     }
     
-    $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{"अनावृत_अवगाढता"} = [];
     if (defined $unpacked_dims && $unpacked_dims ne "") {
         my $unpacked_idx = 0;
         while ($unpacked_dims =~ /^\s*\[/) {
             if ($unpacked_dims =~ /\[\s*(\d+)\s*:\s*(\d+)\s*\]/) {
                 my $lsb = $2;
                 my $msb = $1;
-                push @{ $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{"अनावृत_अवगाढता"} }, { "आद्यसूचकः" => $lsb, "अन्त्यसूचकः" => $msb };
                 $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{$unpacked_idx . "_अनावृत_अवगाढता"} = { "आद्यसूचकः" => $lsb, "अन्त्यसूचकः" => $msb };
                 $unpacked_idx++;
                 $unpacked_dims =~ s/\[\s*$msb\s*:\s*$lsb\s*\]//;
@@ -213,6 +211,8 @@ sub populate_port_varga {
         if ($unpacked_dims !~ /^\s*$/) {
             Diagnostics::report_diagnostic("Error", "ERR_UNKNOWN_BAREWORD", "Unknown bareword $unpacked_dims in ModulePort::populate_port_varga unpacked", $line_no);
         }
+    } else {
+        $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{"अनावृत_अवगाढता"} = [];
     }
     
     if (defined $initial_value && $initial_value ne "") {
@@ -561,7 +561,7 @@ sub convert_to_binary {
         }
         
         # 3. Target size adjustment (if $size was defined, we might need to stretch to $target_size)
-        if (defined $size && defined $target_size && $size != $target_size) {
+        if (defined $size && $size ne "" && defined $target_size && $size != $target_size) {
             my $final_len = length($bin_str);
             if ($final_len < $target_size) {
                 my $pad_char = '0';
