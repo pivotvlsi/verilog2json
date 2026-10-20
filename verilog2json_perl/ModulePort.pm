@@ -431,17 +431,19 @@ sub parse_array_literal {
     }
     push @elements, $current if $current ne "";
     
-    my @parsed_elements = ();
+    my %parsed_hash = ();
     my $any_signed = "असत्यम्";
+    my $idx = 0;
     foreach my $elem (@elements) {
         $elem =~ s/^\s+|\s+$//g;
         my ($parsed, $signed, $meta) = convert_to_binary($elem, $target_size, $line_no);
         $any_signed = 1 if $signed;
-        push @parsed_elements, $parsed;
+        $parsed_hash{$idx . "_मूल्यम्"} = $parsed;
+        $idx++;
         $any_signed = "सत्यम्" if $signed eq "सत्यम्";
     }
     
-    return (\@parsed_elements, $any_signed);
+    return (\%parsed_hash, $any_signed);
 }
 
 sub convert_to_binary {
