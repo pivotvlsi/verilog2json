@@ -179,15 +179,19 @@ sub populate_port_varga {
     }
     while ($port_desc =~ /^\s*\[/) {
         if ($port_desc =~ /\[\s*(\d*):(\d*)\s*\]/) {
-            $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{"अवगाढता"}++;
             my $अस्थायि = $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{"अवगाढता"};
-            $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{$अस्थायि."_आद्यसूचकः"} = $2;
-            $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{$अस्थायि."_अन्त्यसूचकः"} =$1;
+            my $lsb = $2;
+            my $msb = $1;
+            my $min_lsb = ($msb < $lsb) ? $msb : $lsb;
+            $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{$अस्थायि."_आद्यसूचकः"} = $lsb;
+            $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{$अस्थायि."_अन्त्यसूचकः"} = $msb;
+            $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{$अस्थायि."_आधारः"} = $min_lsb;
+            $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{"अवगाढता"}++;
             $port_desc =~ s/\[//;
             $port_desc =~ s/\]//;
             $port_desc =~ s/://;
-            $port_desc =~ s/$JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{$अस्थायि."_अन्त्यसूचकः"}//;
-            $port_desc =~ s/$JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{$अस्थायि."_आद्यसूचकः"}//;
+            $port_desc =~ s/$msb//;
+            $port_desc =~ s/$lsb//;
 
         } else {
             Diagnostics::report_diagnostic("Error", "ERR_PORT_DECLARATION", "Error in port declaration $port_name", $line_no);
@@ -219,7 +223,7 @@ sub populate_port_varga {
         my $target_bitwidth = 1;
         my $depth = $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{"अवगाढता"};
         if (defined $depth && $depth > 0) {
-            for (my $i = 1; $i <= $depth; $i++) {
+            for (my $i = 0; $i < $depth; $i++) {
                 my $msb = $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{$i."_अन्त्यसूचकः"};
                 my $lsb = $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{$i."_आद्यसूचकः"};
                 $msb = 0 if !defined $msb || $msb eq "";
