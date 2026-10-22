@@ -5,5 +5,6 @@ module test_5_1_14;
 
     always @* begin
         out = {2{a, b}};
+        $display("out = %b", out);
     end
 endmodule

@@ -5,5 +5,6 @@ reg c;
 
 initial begin
     {a, {b, c}} = 3'b111;
+    $display("a = %b, b = %b, c = %b", a, b, c);
 end
 endmodule

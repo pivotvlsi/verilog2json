@@ -170,8 +170,46 @@ sub is_operator {
     my ($tok) = @_;
     return exists $precedence{$tok};
 }
-
-
-
+sub parse_system_task_args {
+    my ($str) = @_;
+    my @args;
+    return @args unless defined $str && $str =~ /\S/;
+    
+    my $len = length($str);
+    my $curr = "";
+    my $in_quote = 0;
+    my $depth_paren = 0;
+    my $depth_bracket = 0;
+    my $depth_brace = 0;
+    
+    for (my $i = 0; $i < $len; $i++) {
+        my $ch = substr($str, $i, 1);
+        if ($ch eq '"' && ($i == 0 || substr($str, $i - 1, 1) ne '\\')) {
+            $in_quote = !$in_quote;
+            $curr .= $ch;
+        } elsif ($in_quote) {
+            $curr .= $ch;
+        } else {
+            if ($ch eq '(') { $depth_paren++; $curr .= $ch; }
+            elsif ($ch eq ')') { $depth_paren-- if $depth_paren > 0; $curr .= $ch; }
+            elsif ($ch eq '[') { $depth_bracket++; $curr .= $ch; }
+            elsif ($ch eq ']') { $depth_bracket-- if $depth_bracket > 0; $curr .= $ch; }
+            elsif ($ch eq '{') { $depth_brace++; $curr .= $ch; }
+            elsif ($ch eq '}') { $depth_brace-- if $depth_brace > 0; $curr .= $ch; }
+            elsif ($ch eq ',' && $depth_paren == 0 && $depth_bracket == 0 && $depth_brace == 0) {
+                $curr =~ s/^\s+//;
+                $curr =~ s/\s+$//;
+                push @args, $curr if length($curr) > 0;
+                $curr = "";
+            } else {
+                $curr .= $ch;
+            }
+        }
+    }
+    $curr =~ s/^\s+//;
+    $curr =~ s/\s+$//;
+    push @args, $curr if length($curr) > 0;
+    return @args;
+}
 
 1;

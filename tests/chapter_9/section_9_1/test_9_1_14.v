@@ -3,5 +3,6 @@ reg a;
 always @(a) begin
     if (a) ;
     else a = 0;
+    $display("a = %b", a);
 end
 endmodule

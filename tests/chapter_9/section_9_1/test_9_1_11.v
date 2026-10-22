@@ -6,5 +6,7 @@ initial a = 1;
 initial begin
     a <= #4 0;
     a <= #4 1;
+    #5;
+    $display("a = %b", a);
 end
 endmodule

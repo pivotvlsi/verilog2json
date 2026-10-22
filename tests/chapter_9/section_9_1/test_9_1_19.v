@@ -10,5 +10,6 @@ always @* begin
     tmp1 = a & b;
     tmp2 = c & d;
     y = tmp1 | tmp2;
+    $display("tmp1 = %b, tmp2 = %b, y = %b", tmp1, tmp2, y);
 end
 endmodule

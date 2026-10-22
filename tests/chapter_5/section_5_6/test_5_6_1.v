@@ -5,5 +5,6 @@ module test_5_6_1;
     initial begin
         a = 8'hff;
         b = 8'hff;
+        $display("a = %b, b = %b", a, b);
     end
 endmodule

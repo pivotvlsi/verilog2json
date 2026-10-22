@@ -4,5 +4,6 @@ module test_9_1_7;
     reg b;
     always @(posedge clk) begin
         a <= @(posedge clk) b;
+        $display("a = %b", a);
     end
 endmodule

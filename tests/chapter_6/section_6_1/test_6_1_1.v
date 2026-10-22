@@ -7,5 +7,6 @@ module test_6_1_1;
         a = 1;
         vec = 8'hFF;
         mem[0] = 8'hAA;
+        $display("a = %b, vec = %b, mem[0] = %b", a, vec, mem[0]);
     end
 endmodule

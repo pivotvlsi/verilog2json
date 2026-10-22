@@ -9,5 +9,6 @@ always @* begin
             result = rega;
         else
             result = regb;
+    $display("result = %b", result);
 end
 endmodule

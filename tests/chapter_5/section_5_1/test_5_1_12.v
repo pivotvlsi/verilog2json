@@ -21,5 +21,6 @@ module test_5_1_12;
         // Bit select with unknown/high-Z expressions
         out_bit_x = vect[1'bx];
         out_bit_z = vect[1'bz];
+        $display("out_bit = %b, out_part1 = %b, out_part2 = %b, out_bit_x = %b, out_bit_z = %b", out_bit, out_part1, out_part2, out_bit_x, out_bit_z);
     end
 endmodule

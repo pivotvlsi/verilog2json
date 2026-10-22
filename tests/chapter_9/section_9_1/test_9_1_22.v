@@ -5,5 +5,6 @@ reg [7:0] y;
 always @* begin
     y = 8'hff;
     y[a] = !en;
+    $display("y = %b", y);
 end
 endmodule

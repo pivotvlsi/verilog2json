@@ -5,5 +5,6 @@ module test_5_1_8;
         IntA = -'d 12 / 3;
         IntA = -'sd 12 / 3;
         IntA = -4'sd 12 / 3;
+        $display("IntA = %d", IntA);
     end
 endmodule

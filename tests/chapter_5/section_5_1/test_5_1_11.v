@@ -5,5 +5,6 @@ module test_5_1_11;
     always @* begin
         out = big_vect[2 +: 8];
         little_vect[2 -: 8] = out;
+        $display("out = %b, little_vect = %b", out, little_vect);
     end
 endmodule

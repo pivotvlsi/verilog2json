@@ -5,5 +5,6 @@ module test_9_1_4;
     wire d;
     initial begin
         a = #10 b;
+        $display("a = %b", a);
     end
 endmodule

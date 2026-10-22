@@ -4,5 +4,6 @@ reg b;
 always @(a) begin
     if (a) b = 1;
     else b = 0;
+    $display("b = %b", b);
 end
 endmodule

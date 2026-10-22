@@ -114,7 +114,9 @@ sub always_block {
                 $line1 .= $VerilogParser::verilog_file[$line_no];
                 chomp($line1);
                 $line1 =~ s/#\s*(\d+)/#\($1\)/g;
-                $line1 =~ s/\s*//g;
+                if ($line1 !~ /\$display/) {
+                    $line1 =~ s/\s*//g;
+                }
             }
             if ($line1 =~ /^\s*if/) { #Check for IF loop
                 $line_no = AlwaysBlockIf::always_comb_if ($line1, $line_no);
@@ -142,6 +144,40 @@ sub always_block {
 
             } elsif ($line1 =~ /^\s*;\s*$/) { # Null statement
                 $line1 = "";
+                if ($expect_end == 0) {
+                    $end_occurred = 1;
+                }
+            } elsif ($line1 =~ /^\s*\$display\b/) {
+                while ($line1 !~ /;/) {
+                    $line_no = $line_no+1;
+                    if ($line_no > $VerilogParser::max_line) {
+                        Diagnostics::report_diagnostic("Error", "ERR_FATAL", "Max line reached at always_block", $line_no);
+                    }
+                    $line1 .= $VerilogParser::verilog_file[$line_no];
+                    chomp($line1);
+                }
+                if ($line1 =~ /;/) {
+                    $line1 =~ s/;//;
+                } else {
+                    print "Semicolon missing at end of \$display statement";
+                }
+                my $args_str = "";
+                if ($line1 =~ /\$display\s*\(\s*(.*?)\s*\)\s*$/) {
+                    $args_str = $1;
+                } elsif ($line1 =~ /\$display\s*$/) {
+                    $args_str = "";
+                } else {
+                    Diagnostics::report_diagnostic("Error", "ERR_FATAL", "Print statement format is not correct", $line_no);
+                }
+                my @args = CheckExpr::parse_system_task_args($args_str);
+                my $stt = ${VerilogParser::statement_line}."_वाक्यम्";
+                $json_var->{$stt} //= {};
+                $json_var->{$stt}->{"प्रकारः"} = "मुद्रणम्";
+                $json_var->{$stt}->{"क्रमः"} = $VerilogParser::statement_order;
+                $json_var->{$stt}->{"तर्काः"} = \@args;
+                $VerilogParser::statement_order = $VerilogParser::statement_order+1;
+                $line1 = "";
+                $VerilogParser::statement_line = $VerilogParser::statement_line+1;
                 if ($expect_end == 0) {
                     $end_occurred = 1;
                 }
@@ -198,82 +234,7 @@ sub always_block {
 
 
 
-                if ($line1 =~ /\$display/) {
-                    $line1 = $VerilogParser::verilog_file[$line_no];
-                    while ($line1 !~ /;/) {
-                        $line_no = $line_no+1;
-                        if ($line_no > $VerilogParser::max_line) {
-                            Diagnostics::report_diagnostic("Error", "ERR_FATAL", "Max line reached at always_block", $line_no);
-                        }
-                        $line1 .= $VerilogParser::verilog_file[$line_no];
-                        chomp($line1);
-                    }
-                    if ($line1 =~ /;/) {
-                        $line1 =~ s/;//;
-                    } else {
-                        print "Semicolon missing at end of \$display statement";
-                    }
-                    my $main_text;
-                    my $var_list;
-                    if ($line1 =~ /display\s*\(\s*\"((?:\\.|[^"\\])*)"(.*?)\)$/) {
-                        $main_text = $1;
-                        $var_list = $2;
-                    } else {
-                        Diagnostics::report_diagnostic("Error", "ERR_FATAL", " Print statement format is not correct", $line_no);
-                    }
-                    $var_list =~ s/\s*//g;
-                    $main_text =~ s/%(\d*[ubohctsd])/<<%$1<</g;
-                    my @text_parts = split /<</, $main_text;
-                    my @var_parts = split /,/,$var_list;
-                    my $part_no=1;
-                    my $total_text_parts = scalar @text_parts;
-                    my $total_var_parts = scalar @var_parts;
-                    my $print_statement = "std::cout <<";
-                    if((($total_text_parts)/2)+1 == $total_var_parts) {
-                        foreach my $j (@text_parts) {
-                            if ($j =~ /%(\d*)([ubohctsd])/) {
-                                my $resolution = $1;
-                                my $conversion = $2;
-                                if ($resolution eq "") {
-                                    $resolution = 0;
-                                }
-                                if ($conversion =~ /d/) {
-                                    if ($JsonOutput::module_json{$VerilogParser::module_name}{$var_parts[$part_no]}{"प्रकारः"} eq "तारः") {
-
-                                       $print_statement = $print_statement.CheckExprInitialBlock::दशमाननिर्गमः ($var_parts[$part_no])."<<";
-                                    } else {
-                                        Diagnostics::report_diagnostic("Error", "ERR_FATAL", "Bare word $var_parts[$part_no] couldnot be identified in always block", $line_no);
-                                    }
-                                }
-                                $part_no++;
-                            } else {
-                                $print_statement = $print_statement.'"'.$j.'"'."<<";
-                            }
-                        }
-                        $print_statement = $print_statement."endl;";
-                        while ($line1 =~ /^$/) {
-                            $line_no = $line_no+1;
-                            if ($line_no > $VerilogParser::max_line) {
-                                Diagnostics::report_diagnostic("Error", "ERR_FATAL", "Max line reached at always_block", $line_no);
-                            }
-                            $line1 .= $VerilogParser::verilog_file[$line_no];
-                            chomp($line1);
-                            $line1 =~ s/\s*//g;
-                        }
-                    } else {
-                        Diagnostics::report_diagnostic("Error", "ERR_FATAL", "Error in print statement, Format specifier and variables donot match", $line_no);
-                    }
-                    my $stt = ${VerilogParser::statement_line}."_वाक्यम्";
-                    $json_var->{$stt} //= {};
-                    $json_var->{$stt}->{"प्रकारः"} = "मुद्रणम्";
-                    $json_var->{$stt}->{"क्रमः"} = $VerilogParser::statement_order;
-                    $json_var->{$stt}->{"वाक्यम्"} = $print_statement; 
-                    $VerilogParser::statement_order = $VerilogParser::statement_order+1;
-                    $line1 = "";
-                    $VerilogParser::statement_line = $VerilogParser::statement_line+1;                           
-                } else {
-                        Diagnostics::report_diagnostic("Error", "ERR_FATAL", " Unsupported system tasks", $line_no);
-                }
+                Diagnostics::report_diagnostic("Error", "ERR_FATAL", " Unsupported system tasks", $line_no);
             } elsif ($line1 =~ /endmodule|always/) {
                 Diagnostics::report_diagnostic("Error", "ERR_FATAL", "Missing end at $line_no with line $line1", $line_no);
             } else {

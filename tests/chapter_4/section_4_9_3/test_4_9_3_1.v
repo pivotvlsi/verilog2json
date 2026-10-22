@@ -11,5 +11,6 @@ module test_4_9_3_1;
         arrayb[1][0] = 0;
         inta[4] = 33559;
         chng_hist[t_index] = $time;
+        $display("mema[1] = %b, arrayb[1][0] = %b, inta[4] = %d", mema[1], arrayb[1][0], inta[4]);
     end
 endmodule

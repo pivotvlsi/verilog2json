@@ -6,5 +6,6 @@ module test_6_1_2;
         a[0] = 1'b1;
         a[3:1] = 3'b101;
         a[idx+:4] = 4'hA;
+        $display("a = %b", a);
     end
 endmodule

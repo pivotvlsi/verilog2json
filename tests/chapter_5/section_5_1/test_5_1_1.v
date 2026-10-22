@@ -4,5 +4,6 @@ module test_5_1_1;
     reg c;
     always @* begin
         c = (a === b) | (~&a) | (^~b) | (a !== 0);
+        $display("c = %b", c);
     end
 endmodule

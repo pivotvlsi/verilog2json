@@ -4,5 +4,6 @@ module test_5_1_4;
     reg [1:0] c;
     always @* begin
         c = {a, b};
+        $display("c = %b", c);
     end
 endmodule

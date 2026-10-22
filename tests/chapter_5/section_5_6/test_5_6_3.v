@@ -7,5 +7,6 @@ module test_5_6_3;
         a = 8'sh8f;
         b = 8'sh8f;
         c = -113;
+        $display("a = %b, b = %b, c = %b", a, b, c);
     end
 endmodule

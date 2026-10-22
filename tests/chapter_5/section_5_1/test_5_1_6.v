@@ -21,5 +21,6 @@ module test_5_1_6;
         if (accumulator > 100 && out_flag != 1) begin
             memory_array[0] = data_bus ^ 8'hFF;
         end
+        $display("out_flag = %b, accumulator = %b, memory_array[0] = %b", out_flag, accumulator, memory_array[0]);
     end
 endmodule

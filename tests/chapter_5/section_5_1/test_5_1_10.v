@@ -11,5 +11,6 @@ module test_5_1_10;
         result2 = a < (foo - 1);
         result3 = foo - (1 < a);
         result4 = foo - 1 < a;
+        $display("result1 = %b, result2 = %b, result3 = %b, result4 = %b", result1, result2, result3, result4);
     end
 endmodule
