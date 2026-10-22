@@ -1,1 +1,1 @@
-- Donot push to github unless explicitly instructed.
+- Donot commit or push to github unless explicitly instructed.
