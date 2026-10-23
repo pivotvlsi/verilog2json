@@ -23,4 +23,7 @@ module test_5_1_6;
         end
         $display("out_flag = %b, accumulator = %b, memory_array[0] = %b", out_flag, accumulator, memory_array[0]);
     end
+    initial begin
+        #10 $finish;
+    end
 endmodule

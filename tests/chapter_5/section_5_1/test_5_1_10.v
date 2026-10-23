@@ -13,4 +13,7 @@ module test_5_1_10;
         result4 = foo - 1 < a;
         $display("result1 = %b, result2 = %b, result3 = %b, result4 = %b", result1, result2, result3, result4);
     end
+    initial begin
+        #10 $finish;
+    end
 endmodule

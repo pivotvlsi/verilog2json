@@ -12,4 +12,7 @@ always @* begin
     y = tmp1 | tmp2;
     $display("tmp1 = %b, tmp2 = %b, y = %b", tmp1, tmp2, y);
 end
+    initial begin
+        #10 $finish;
+    end
 endmodule

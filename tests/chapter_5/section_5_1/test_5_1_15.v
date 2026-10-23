@@ -9,4 +9,7 @@ module test_5_1_15;
         out = {a, {2{b, c}}, d};
         $display("out = %b", out);
     end
+    initial begin
+        #10 $finish;
+    end
 endmodule

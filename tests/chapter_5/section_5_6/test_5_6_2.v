@@ -8,5 +8,6 @@ module test_5_6_2;
         a = (s / b);
         c = (a + b);
         $display("a = %b, c = %b", a, c);
+        $finish;
     end
 endmodule

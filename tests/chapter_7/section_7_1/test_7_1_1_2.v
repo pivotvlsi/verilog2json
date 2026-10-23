@@ -10,5 +10,6 @@ my_gate u2 (.en(1'b0), .d(data[1:0]), .clk(clk));
 
     initial begin
         $display("data = %b, clk = %b", data, clk);
+        $finish;
     end
 endmodule

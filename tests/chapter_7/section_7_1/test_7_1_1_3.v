@@ -8,5 +8,6 @@ my_gate u1 (.in({a, b}), .out(c));
 
     initial begin
         $display("a = %b, b = %b, c = %b", a, b, c);
+        $finish;
     end
 endmodule

@@ -6,4 +6,7 @@ module test_9_1_8;
         a <= repeat(3) @(posedge clk) b;
         $display("a = %b", a);
     end
+    initial begin
+        #10 $finish;
+    end
 endmodule

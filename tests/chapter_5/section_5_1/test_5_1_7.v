@@ -14,4 +14,7 @@ module test_5_1_7;
         a = 'hFf_AA_xX_zZ;
         $display("a = %b, b = %b, c = %b, d = %b, e = %b", a, b, c, d, e);
     end
+    initial begin
+        #10 $finish;
+    end
 endmodule

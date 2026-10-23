@@ -6,4 +6,7 @@ module test_5_1_4;
         c = {a, b};
         $display("c = %b", c);
     end
+    initial begin
+        #10 $finish;
+    end
 endmodule

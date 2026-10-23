@@ -1,1 +1,2 @@
 - Donot commit or push to github unless explicitly instructed.
+- Only commit or push from verilog2json only.

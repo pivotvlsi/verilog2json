@@ -19,5 +19,6 @@ module test_4_10_2;
 
     initial begin
         $display("PARAM1 = %d, PARAM5 = %h, PARAM7 = %h, PARAM8 = %d, PARAM9 = %d", PARAM1, PARAM5, PARAM7, PARAM8, PARAM9);
+        $finish;
     end
 endmodule

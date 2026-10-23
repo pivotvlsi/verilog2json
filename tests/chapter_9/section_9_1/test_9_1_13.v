@@ -6,5 +6,6 @@ assign #10 a = ~b;
 initial begin
     #15;
     $display("a = %b, b = %b", a, b);
+    $finish;
 end
 endmodule

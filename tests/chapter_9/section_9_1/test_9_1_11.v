@@ -8,5 +8,6 @@ initial begin
     a <= #4 1;
     #5;
     $display("a = %b", a);
+    $finish;
 end
 endmodule

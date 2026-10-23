@@ -7,4 +7,7 @@ module test_5_1_8;
         IntA = -4'sd 12 / 3;
         $display("IntA = %d", IntA);
     end
+    initial begin
+        #10 $finish;
+    end
 endmodule

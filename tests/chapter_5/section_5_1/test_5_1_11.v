@@ -7,4 +7,7 @@ module test_5_1_11;
         little_vect[2 -: 8] = out;
         $display("out = %b, little_vect = %b", out, little_vect);
     end
+    initial begin
+        #10 $finish;
+    end
 endmodule

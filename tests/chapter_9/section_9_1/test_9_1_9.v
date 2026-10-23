@@ -4,4 +4,7 @@ module test_9_1_9;
         c = #5 ~c;
         $display("c = %b", c);
     end
+    initial begin
+        #10 $finish;
+    end
 endmodule

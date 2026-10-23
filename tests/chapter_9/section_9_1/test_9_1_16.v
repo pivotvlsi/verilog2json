@@ -11,4 +11,7 @@ always @* begin
             result = regb;
     $display("result = %b", result);
 end
+    initial begin
+        #10 $finish;
+    end
 endmodule

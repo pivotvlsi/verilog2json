@@ -6,4 +6,7 @@ always @(a) begin
     else b = 0;
     $display("b = %b", b);
 end
+    initial begin
+        #10 $finish;
+    end
 endmodule

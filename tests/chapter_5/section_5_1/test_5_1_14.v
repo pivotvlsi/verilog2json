@@ -7,4 +7,7 @@ module test_5_1_14;
         out = {2{a, b}};
         $display("out = %b", out);
     end
+    initial begin
+        #10 $finish;
+    end
 endmodule

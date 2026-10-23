@@ -4,5 +4,6 @@ module test_4_10_1;
     localparam PARAM3 = 10;
     initial begin
         $display("PARAM1 = %h, PARAM2 = %h, PARAM3 = %d", PARAM1, PARAM2, PARAM3);
+        $finish;
     end
 endmodule

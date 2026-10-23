@@ -9,4 +9,7 @@ module test_5_1_13;
         out = {a, b, c, d};
         $display("out = %b", out);
     end
+    initial begin
+        #10 $finish;
+    end
 endmodule

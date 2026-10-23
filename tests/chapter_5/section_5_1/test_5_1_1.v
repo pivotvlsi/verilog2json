@@ -6,4 +6,7 @@ module test_5_1_1;
         c = (a === b) | (~&a) | (^~b) | (a !== 0);
         $display("c = %b", c);
     end
+    initial begin
+        #10 $finish;
+    end
 endmodule

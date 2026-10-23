@@ -6,5 +6,6 @@ module test_6_1_3;
     initial begin
         {a, b} = c;
         $display("a = %b, b = %b", a, b);
+        $finish;
     end
 endmodule

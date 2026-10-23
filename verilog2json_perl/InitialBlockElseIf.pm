@@ -155,13 +155,19 @@ sub initial_block_elseif {
                 print "Semicolon missing at end of system tasks";
             }
             if ($line1 =~ /\$finish/) {
+                my $args_str = "";
+                if ($line1 =~ /\$finish\s*\(\s*(.*?)\s*\)\s*$/) {
+                    $args_str = $1;
+                }
                 my $stt = ${VerilogParser::statement_line}."_वाक्यम्";
                 $json_var->{$stt} //= {};
-                $json_var->{$stt}->{"प्रकारः"} = "समापनम्";
+                $json_var->{$stt}->{"प्रकारः"} = "तन्त्रम्";
+                $json_var->{$stt}->{"कार्यनाम"} = "finish";
                 $json_var->{$stt}->{"क्रमः"} = $VerilogParser::statement_order;
+                $json_var->{$stt}->{"तर्कः"} = $args_str;
                 $VerilogParser::statement_order = $VerilogParser::statement_order+1;
                 $line_no = $line_no+1;
-                $line1 =~ s/\$finish//;
+                $line1 =~ s/\$finish.*//;
                 $VerilogParser::statement_line = $VerilogParser::statement_line+1;
             }         
         } elsif ($line1 =~ /endmodule|always/) {

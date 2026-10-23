@@ -6,6 +6,7 @@ module test_9_1_2;
         a = 'b1;
         b = 'b0;
         $display("a = %b, b = %b", a, b);
+        $finish;
     end
     
     always begin

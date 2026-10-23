@@ -7,4 +7,7 @@ always @* begin
     y[a] = !en;
     $display("y = %b", y);
 end
+    initial begin
+        #10 $finish;
+    end
 endmodule

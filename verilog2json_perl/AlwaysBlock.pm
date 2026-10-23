@@ -169,12 +169,44 @@ sub always_block {
                 } else {
                     Diagnostics::report_diagnostic("Error", "ERR_FATAL", "Print statement format is not correct", $line_no);
                 }
-                my @args = CheckExpr::parse_system_task_args($args_str);
                 my $stt = ${VerilogParser::statement_line}."_वाक्यम्";
                 $json_var->{$stt} //= {};
-                $json_var->{$stt}->{"प्रकारः"} = "मुद्रणम्";
+                $json_var->{$stt}->{"प्रकारः"} = "तन्त्रम्";
+                $json_var->{$stt}->{"कार्यनाम"} = "display";
                 $json_var->{$stt}->{"क्रमः"} = $VerilogParser::statement_order;
-                $json_var->{$stt}->{"तर्काः"} = \@args;
+                $json_var->{$stt}->{"तर्कः"} = $args_str;
+                $VerilogParser::statement_order = $VerilogParser::statement_order+1;
+                $line1 = "";
+                $VerilogParser::statement_line = $VerilogParser::statement_line+1;
+                if ($expect_end == 0) {
+                    $end_occurred = 1;
+                }
+            } elsif ($line1 =~ /^\s*\$finish\b/) {
+                while ($line1 !~ /;/) {
+                    $line_no = $line_no+1;
+                    if ($line_no > $VerilogParser::max_line) {
+                        Diagnostics::report_diagnostic("Error", "ERR_FATAL", "Max line reached at always_block", $line_no);
+                    }
+                    $line1 .= $VerilogParser::verilog_file[$line_no];
+                    chomp($line1);
+                }
+                if ($line1 =~ /;/) {
+                    $line1 =~ s/;//;
+                } else {
+                    Diagnostics::report_diagnostic("Error", "ERR_FATAL", "Semicolon missing at end of \$finish statement", $line_no);
+                }
+                my $args_str = "";
+                if ($line1 =~ /\$finish\s*\(\s*(.*?)\s*\)\s*$/) {
+                    $args_str = $1;
+                } elsif ($line1 =~ /\$finish\s*$/) {
+                    $args_str = "";
+                }
+                my $stt = ${VerilogParser::statement_line}."_वाक्यम्";
+                $json_var->{$stt} //= {};
+                $json_var->{$stt}->{"प्रकारः"} = "तन्त्रम्";
+                $json_var->{$stt}->{"कार्यनाम"} = "finish";
+                $json_var->{$stt}->{"क्रमः"} = $VerilogParser::statement_order;
+                $json_var->{$stt}->{"तर्कः"} = $args_str;
                 $VerilogParser::statement_order = $VerilogParser::statement_order+1;
                 $line1 = "";
                 $VerilogParser::statement_line = $VerilogParser::statement_line+1;

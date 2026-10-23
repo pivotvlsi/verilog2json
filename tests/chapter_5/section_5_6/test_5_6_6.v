@@ -5,5 +5,6 @@ module test_5_6_6;
     reg signed [5:0] d = -113;
     initial begin
         $display("a = %b, b = %b, c = %b, d = %b", a, b, c, d);
+        $finish;
     end
 endmodule
