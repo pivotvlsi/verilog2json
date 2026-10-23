@@ -54,4 +54,8 @@ module test_3_5_1();
 
     // Syntax 3-1: The ? wildcard (Alternative for z)
     wire [3:0] wildcard_num = 4'b10??;
+
+    initial begin
+        $display("a = %b, b = %h, c = %d, octal_val = %o", a, b, c, octal_val);
+    end
 endmodule

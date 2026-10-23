@@ -9,4 +9,8 @@ my_gate u1 (a, , c);
 
 // Named instantiation with empty port
 my_gate u2 (.p1(a), .p2(), .p3(c));
+
+    initial begin
+        $display("a = %b, b = %b, c = %b, d = %b", a, b, c, d);
+    end
 endmodule

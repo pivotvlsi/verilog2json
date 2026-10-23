@@ -7,4 +7,8 @@ my_gate u1 (1'b1, data[3:0], clk);
 
 // Named instantiation with literal and slice
 my_gate u2 (.en(1'b0), .d(data[1:0]), .clk(clk));
+
+    initial begin
+        $display("data = %b, clk = %b", data, clk);
+    end
 endmodule

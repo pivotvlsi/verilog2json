@@ -1,4 +1,7 @@
 module test_9_1_9;
     reg c;
-    always c = #5 ~c;
+    always begin
+        c = #5 ~c;
+        $display("c = %b", c);
+    end
 endmodule

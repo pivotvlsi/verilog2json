@@ -16,4 +16,8 @@ module test_4_10_2;
 
     // Unpacked dimensions (not usually used for parameters but let's test parser robustness)
     parameter [7:0] PARAM10 [0:3] = 0; // The parser limitation says comma separated is unsupported, but unpacked dimensions are just [] after name
+
+    initial begin
+        $display("PARAM1 = %d, PARAM5 = %h, PARAM7 = %h, PARAM8 = %d, PARAM9 = %d", PARAM1, PARAM5, PARAM7, PARAM8, PARAM9);
+    end
 endmodule

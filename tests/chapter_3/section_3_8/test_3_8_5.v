@@ -3,4 +3,7 @@
     (* 
         multiline attr
     *) wire b;
+    initial begin
+        $display("a = %b, b = %b", a, b);
+    end
 endmodule

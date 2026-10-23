@@ -7,4 +7,7 @@ module test_5_1_9;
     time time_var = 12;
     real real_var = -1.23;
     realtime realtime_var = -12.34;
+    initial begin
+        $display("unsigned_net = %b, signed_net = %b, unsigned_reg = %d, signed_reg = %d, int_var = %d", unsigned_net, signed_net, unsigned_reg, signed_reg, int_var);
+    end
 endmodule
