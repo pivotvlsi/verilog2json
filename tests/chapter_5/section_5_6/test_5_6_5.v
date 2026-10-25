@@ -10,6 +10,6 @@ module test_5_6_5;
         b = -113;
         d = b;
         $display("a = %b, b = %b, c = %b, d = %b", a, b, c, d);
-        $finish;
+        #1 $finish;
     end
 endmodule

@@ -5,6 +5,6 @@
     *) wire b;
     initial begin
         $display("a = %b, b = %b", a, b);
-        $finish;
+        #1 $finish;
     end
 endmodule

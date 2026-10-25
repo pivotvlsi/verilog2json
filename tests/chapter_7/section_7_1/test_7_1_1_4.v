@@ -22,6 +22,6 @@ module test_7_1_1_4;
 
     initial begin
         $display("out1 = %b, out2 = %b, out3 = %b", out1, out2, out3);
-        $finish;
+        #1 $finish;
     end
 endmodule

@@ -4,6 +4,6 @@ module test_3_9_1;
     time t_val = 2ns;
     initial begin
         $display("r_val = %f, rt_val = %f, t_val = %0d", r_val, rt_val, t_val);
-        $finish;
+        #1 $finish;
     end
 endmodule

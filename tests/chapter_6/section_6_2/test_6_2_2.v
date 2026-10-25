@@ -3,6 +3,6 @@ module test_6_2_2;
     integer j;
     initial begin
         $display("i = %d, j = %d", i, j);
-        $finish;
+        #1 $finish;
     end
 endmodule

@@ -6,6 +6,6 @@ module test_5_6_1;
         a = 8'hff;
         b = 8'hff;
         $display("a = %b, b = %b", a, b);
-        $finish;
+        #1 $finish;
     end
 endmodule

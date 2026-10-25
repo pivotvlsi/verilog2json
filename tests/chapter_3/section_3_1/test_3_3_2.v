@@ -6,6 +6,6 @@ module test_3_3_2();
     /* Inline block comment */ 
     initial begin
         $display("test_3_3_2 PASSED");
-        $finish;
+        #1 $finish;
     end
 endmodule

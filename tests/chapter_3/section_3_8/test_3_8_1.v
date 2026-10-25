@@ -3,6 +3,6 @@ module test_3_8_1;
     wire a;
     initial begin
         $display("a = %b", a);
-        $finish;
+        #1 $finish;
     end
 endmodule

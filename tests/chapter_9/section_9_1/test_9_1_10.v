@@ -12,6 +12,6 @@ initial begin
     f <= #4 1;  // f will be assigned 1 at time 4
     #10;
     $display("d = %b, e = %b, f = %b", d, e, f);
-    $finish;
+    #1 $finish;
 end
 endmodule

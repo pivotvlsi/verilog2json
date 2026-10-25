@@ -5,6 +5,6 @@ module test_5_5_1;
     initial begin
         a = b[7:0];
         $display("a = %b, b = %b", a, b);
-        $finish;
+        #1 $finish;
     end
 endmodule

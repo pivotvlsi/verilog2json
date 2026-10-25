@@ -4,6 +4,6 @@ module test_5_6_4;
     wire [15:0] c = -113;
     initial begin
         $display("a = %b, b = %b, c = %b", a, b, c);
-        $finish;
+        #1 $finish;
     end
 endmodule

@@ -57,6 +57,6 @@ module test_3_5_1();
 
     initial begin
         $display("a = %b, b = %h, c = %d, octal_val = %o", a, b, c, octal_val);
-        $finish;
+        #1 $finish;
     end
 endmodule

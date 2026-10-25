@@ -8,6 +8,6 @@ module test_5_6_3;
         b = 8'sh8f;
         c = -113;
         $display("a = %b, b = %b, c = %b", a, b, c);
-        $finish;
+        #1 $finish;
     end
 endmodule

@@ -4,6 +4,6 @@ module test_4_3_1;
     logic [15:0] l_vec;
     initial begin
         $display("w_vec = %b, r_vec = %b, l_vec = %b", w_vec, r_vec, l_vec);
-        $finish;
+        #1 $finish;
     end
 endmodule

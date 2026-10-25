@@ -4,7 +4,7 @@ module test_3_3_1();
  // Another inline comment
     initial begin
         $display("test_3_3_1 PASSED");
-        $finish;
+        #1 $finish;
     end
 endmodule
 // Final comment
