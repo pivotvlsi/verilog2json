@@ -29,8 +29,13 @@ sub get_ports {
     }
     chomp ($line1);
     
-    # Strip any parameter lists e.g. #(parameter W = 8)
-    while ($line1 =~ s/#\s*\((?:[^)(]*(?:\([^)(]*\)[^)(]*)*)*\)//g) {}
+    # Parse any parameter lists e.g. #(parameter W = 8, parameter V = 2)
+    if ($line1 =~ s/#\s*\(((?:[^)(]*(?:\([^)(]*\)[^)(]*)*)*)\)//) {
+        my $param_list = $1;
+        if (defined $param_list && $param_list !~ /^\s*$/) {
+            parse_module_parameter_list($param_list, $line_no);
+        }
+    }
     
     if ($line1 =~ /\((.*)\)\s*;/s) {
         my $port_list = $1;
@@ -42,6 +47,76 @@ sub get_ports {
         }
     }
     return $line_no;
+}
+
+sub parse_module_parameter_list {
+    my ($param_list_str, $line_no) = @_;
+    # Split by comma respecting brackets/parentheses
+    my @params = split_param_list($param_list_str);
+    my $inherited_type = "";
+    foreach my $param_str (@params) {
+        $param_str =~ s/^\s+|\s+$//g;
+        next if $param_str eq "";
+        
+        my $initial_value = "";
+        if ($param_str =~ s/\s*=\s*(.*?)\s*$//) {
+            $initial_value = $1;
+        } else {
+            Diagnostics::report_diagnostic("Error", "ERR_PARAM_NO_VALUE", "Parameter declaration missing assigned value", $line_no);
+        }
+        
+        $param_str =~ /([A-Za-z][A-Za-z0-9_]*)(?:\s*\[[^\]]*\])*\s*$/;
+        my $port_name = $1;
+        my $unpacked_dims = "";
+        if ($param_str =~ s/\b$port_name\b(.*)$//) {
+            $unpacked_dims = $1;
+        }
+        
+        if ($param_str =~ s/\b(?:parameter|localparam)\b//g) {
+            $inherited_type = $param_str;
+        } elsif ($param_str =~ /^\s*$/ && $inherited_type ne "") {
+            $param_str = $inherited_type;
+        }
+        
+        if (exists $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}) {
+            Diagnostics::report_diagnostic("Error", "ERR_REDECLARATION", "Redeclaration of parameter $port_name", $line_no);
+        } else {
+            $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{"प्रकारः"} = "प्राचलम्";
+            $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{"दिशा"} = "";
+            $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{"निश्चितवर्गः"} = "";
+            $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{"वर्गः"} = "";
+            $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{"क्रमः"} = -1;
+            $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{"द्वारम्"} = "असत्यम्";
+            $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{"अवगाढता"} = 0;
+            $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{"चरणम्"} = [];
+            $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{"चिह्नितम्"} = "असत्यम्";
+            populate_port_varga($port_name, $param_str, $initial_value, $line_no, $unpacked_dims);
+        }
+    }
+}
+
+sub split_param_list {
+    my ($str) = @_;
+    my @items;
+    my $current = "";
+    my $depth = 0;
+    for (my $i = 0; $i < length($str); $i++) {
+        my $char = substr($str, $i, 1);
+        if ($char eq '(' || $char eq '[' || $char eq '{') {
+            $depth++;
+            $current .= $char;
+        } elsif ($char eq ')' || $char eq ']' || $char eq '}') {
+            $depth--;
+            $current .= $char;
+        } elsif ($char eq ',' && $depth == 0) {
+            push @items, $current;
+            $current = "";
+        } else {
+            $current .= $char;
+        }
+    }
+    push @items, $current if $current =~ /\S/;
+    return @items;
 }
 
 sub populate_port {
@@ -220,9 +295,10 @@ sub populate_port_varga {
     }
     
     if (defined $initial_value && $initial_value ne "") {
-        my $target_bitwidth = 1;
         my $depth = $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{"अवगाढता"};
+        my $target_bitwidth = 1;
         if (defined $depth && $depth > 0) {
+            $target_bitwidth = 1;
             for (my $i = 0; $i < $depth; $i++) {
                 my $msb = $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{$i."_अन्त्यसूचकः"};
                 my $lsb = $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{$i."_आद्यसूचकः"};
@@ -230,6 +306,8 @@ sub populate_port_varga {
                 $lsb = 0 if !defined $lsb || $lsb eq "";
                 $target_bitwidth *= (abs($msb - $lsb) + 1);
             }
+        } elsif ($JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{"प्रकारः"} eq "प्राचलम्") {
+            $target_bitwidth = 32;
         }
         my ($bin_val, $val_is_signed, $metadata) = convert_to_binary($initial_value, $target_bitwidth, $line_no);
         $JsonOutput::module_json{$VerilogParser::module_name}{$port_name}{"मूल्यम्"} = $bin_val;
